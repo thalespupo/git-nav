@@ -1,0 +1,11 @@
+#!/bin/sh
+
+LAST_CHECKOUTS=`git reflog | grep "checkout:" | head -n5 `
+
+IFS=$'\n'; array=($LAST_CHECKOUTS); unset IFS; 
+
+for line in "${array[@]}"
+do
+    words=($line) 
+    echo "${words[7]}"
+done
