@@ -1,11 +1,25 @@
 #!/bin/sh
 
-LAST_CHECKOUTS=`git reflog | grep "checkout:" | head -n5 `
+declare -a LAST_BRANCHS
 
-IFS=$'\n'; array=($LAST_CHECKOUTS); unset IFS; 
+get_last_branchs() {
+    LAST_CHECKOUTS=`git reflog | grep "checkout:" | head -n5 `
 
-for line in "${array[@]}"
-do
-    words=($line) 
-    echo "${words[7]}"
-done
+    IFS=$'\n'; array=($LAST_CHECKOUTS); unset IFS;
+
+    for index in "${!array[@]}"; do
+        words=(${array[$index]})
+        LAST_BRANCHS+=(${words[7]})
+    done
+}
+
+show_last_branchs() {
+    echo ${LAST_BRANCHS[@]}
+}
+
+main() {
+    get_last_branchs
+    show_last_branchs
+}
+
+main
