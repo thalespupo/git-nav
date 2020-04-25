@@ -14,7 +14,9 @@ get_last_branchs() {
 }
 
 show_last_branchs() {
-    echo ${LAST_BRANCHS[@]}
+    for i in "${!LAST_BRANCHS[@]}"; do
+        printf '%s %s\n' "[$i]" "${LAST_BRANCHS[$i]}"
+    done
 }
 
 main() {
