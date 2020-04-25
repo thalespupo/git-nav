@@ -13,6 +13,14 @@ get_last_branchs() {
     done
 }
 
+check_parameters() {
+    if [ "$1" != ""  ]; then
+        git checkout ${LAST_BRANCHS[$1]}
+    else
+        show_last_branchs
+    fi
+}
+
 show_last_branchs() {
     for i in "${!LAST_BRANCHS[@]}"; do
         printf '%s %s\n' "[$i]" "${LAST_BRANCHS[$i]}"
@@ -21,7 +29,7 @@ show_last_branchs() {
 
 main() {
     get_last_branchs
-    show_last_branchs
+    check_parameters $1
 }
 
-main
+main $1
