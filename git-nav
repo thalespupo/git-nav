@@ -1,9 +1,10 @@
 #!/bin/sh
 
 declare -a LAST_BRANCHS
+MAX_HISTORY=5
 
 get_last_branchs() {
-    LAST_CHECKOUTS=`git reflog | grep "checkout:" | head -n5 `
+    LAST_CHECKOUTS=`git reflog | grep "checkout:" | head -n$MAX_HISTORY`
 
     IFS=$'\n'; array=($LAST_CHECKOUTS); unset IFS;
 
