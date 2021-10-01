@@ -1,6 +1,11 @@
 #!/bin/sh
 
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+source "$SCRIPT_DIR"/helper/selectoption.sh
+
 declare -a LAST_BRANCHS
+declare CHOICE
 MAX_HISTORY=5
 
 get_last_branchs() {
@@ -15,17 +20,21 @@ get_last_branchs() {
 }
 
 check_parameters() {
-    if [ "$1" != ""  ]; then
+    if [ ${#LAST_BRANCHS[@]} == 0 ]; then
+        echo "No branch history found"
+        exit 0
+    elif [ "$1" != ""  ]; then
         git checkout ${LAST_BRANCHS[$1]}
     else
-        show_last_branchs
+        start_selection
     fi
 }
 
-show_last_branchs() {
-    for i in "${!LAST_BRANCHS[@]}"; do
-        printf '%s %s\n' "[$i]" "${LAST_BRANCHS[$i]}"
-    done
+start_selection() {
+    echo "Select one:"
+    select_option "${LAST_BRANCHS[@]}"
+    CHOICE="${LAST_BRANCHS[$?]}"
+    git checkout $CHOICE
 }
 
 main() {
